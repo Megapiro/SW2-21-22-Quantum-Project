@@ -4,8 +4,8 @@ Nowadays the state of the art of quantum computing is characterized by the so-ca
 
 ## Index
 
-* [Group components](group)
-* [Plan](plan)
+* [Group components](#group)
+* [Plan](#plan)
 
 <a name="group"></a>
 ## Group Components
