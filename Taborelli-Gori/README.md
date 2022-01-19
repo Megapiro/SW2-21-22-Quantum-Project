@@ -3,8 +3,8 @@ The research on quantum computing today is still focusing mostly on addressing t
 
 # Group members
 Students involved in the project: 
--[Stefano Taborelli](https://github.com/stefanotaborelli)
--[Leonardo Gori](https://github.com/LeoGori)
+- [Stefano Taborelli](https://github.com/stefanotaborelli)
+- [Leonardo Gori](https://github.com/LeoGori)
 
 # Plan
 
