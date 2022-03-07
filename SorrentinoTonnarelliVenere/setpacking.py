@@ -35,9 +35,9 @@ class SetPackingProblem:
             for i in range(len(cons)):
                 for j in range(i):
                     bqm.add_interaction(cons[i], cons[j], 6) #add constraint to avoid two non-disjoint subsets being selected       
-        sampler = EmbeddingComposite(DWaveSampler())
+        sampler = EmbeddingComposite(DWaveSampler(solver={'topology__type': 'chimera'}))
         sampleset = sampler.sample(bqm, label="Set Packing")
-        #show(sampleset) 
+        show(sampleset) 
         sample = sampleset.first.sample
         return sample
 
@@ -75,7 +75,9 @@ def read_sanitized_file(filename):
             c = []
             for cons in constraints:
                 c.append(cons["sets"])
-                if not cons["sets"] <= sets:
+                a = set(cons["sets"])
+                b = set(sets)
+                if not a.issubset(b):
                     print("Undefined subset")
                     exit()
                 for i in range(len(cons["sets"])):
