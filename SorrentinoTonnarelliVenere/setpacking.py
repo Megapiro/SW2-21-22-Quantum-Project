@@ -1,8 +1,10 @@
 from dimod import BinaryQuadraticModel
 from dwave.system import DWaveSampler
+from dwave.system import LeapHybridSampler
 from dwave.system import EmbeddingComposite
 from dwave.inspector import *
 import json
+import JSONGenerator
 
 class SetPackingProblem:
     """This class represents a set-packing problem, 
@@ -23,23 +25,30 @@ class SetPackingProblem:
         self.w = weights
         self.c = constraints
 
-    def solve(self):
+    def prepare(self):
         """This method solves this problem by using the BQM API of D-Wave Leap.
             Returns a dictionary in which subsets are the key of the dictionary, and their
             corresponding value is 1 if that subset is selected, 0 otherwise."""
-        bqm = BinaryQuadraticModel({}, {}, 0, 'BINARY')
+        self.bqm = BinaryQuadraticModel({}, {}, 0, 'BINARY')
         for i in range(len(self.s)):
-            bqm.offset += 1
-            bqm.add_variable(self.s[i], 0-(self.w[i])) #add variable for subset
+            self.bqm.offset += 1
+            self.bqm.add_variable(self.s[i], 0-(self.w[i])) #add variable for subset
         for cons in self.c:
             for i in range(len(cons)):
                 for j in range(i):
-                    bqm.add_interaction(cons[i], cons[j], 6) #add constraint to avoid two non-disjoint subsets being selected       
+                    self.bqm.add_interaction(cons[i], cons[j], 6) #add constraint to avoid two non-disjoint subsets being selected       
+        return self
+
+    def sample_hybrid(self):
+        sampler = LeapHybridSampler(solver={'category': 'hybrid'})
+        sampleset = sampler.sample(self.bqm, label="Set Packing")
+        return sampleset
+    
+    def sample_composite(self):
         sampler = EmbeddingComposite(DWaveSampler(solver={'topology__type': 'chimera'}))
-        sampleset = sampler.sample(bqm, label="Set Packing")
+        sampleset = sampler.sample(self.bqm, label="Set Packing")
         show(sampleset) 
-        sample = sampleset.first.sample
-        return sample
+        return sampleset
 
 
 def read_sanitized_file(filename):
@@ -75,11 +84,10 @@ def read_sanitized_file(filename):
             c = []
             for cons in constraints:
                 c.append(cons["sets"])
-                a = set(cons["sets"])
-                b = set(sets)
-                if not a.issubset(b):
-                    print("Undefined subset")
-                    exit()
+                for elem in cons["sets"]:
+                    if elem not in sets:
+                        print("Undefined subsets")
+                        exit()
                 for i in range(len(cons["sets"])):
                     for j in range(i):
                         if(cons["sets"][i] == cons["sets"][j]):
@@ -161,13 +169,9 @@ def get_sanitized_input():
             else:
                 print(e)
             continue
+
+JSONGenerator.generate('SorrentinoTonnarelliVenere/data.json', 4)
+
 problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
+print(problem.prepare().sample_composite())
 
-print(problem.solve())
-"""
-#create problem instance by reading user input
-problem = get_sanitized_input()
-
-#compute problem solution and show it
-print(problem.solve())
-"""
