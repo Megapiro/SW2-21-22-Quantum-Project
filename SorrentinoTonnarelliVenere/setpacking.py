@@ -26,9 +26,11 @@ class SetPackingProblem:
         self.c = constraints
 
     def prepare(self):
-        """This method solves this problem by using the BQM API of D-Wave Leap.
-            Returns a dictionary in which subsets are the key of the dictionary, and their
-            corresponding value is 1 if that subset is selected, 0 otherwise."""
+        """
+            This method prepares the resolution of this problem by using the BQM API of D-Wave Leap.
+            Returns the problem itself. a dictionary in which subsets are the key of the dictionary, and their
+            corresponding value is 1 if that subset is selected, 0 otherwise.
+        """
         self.bqm = BinaryQuadraticModel({}, {}, 0, 'BINARY')
         for i in range(len(self.s)):
             self.bqm.offset += 1
@@ -40,11 +42,22 @@ class SetPackingProblem:
         return self
 
     def sample_hybrid(self):
+        """
+            This method resolves this problem by using the LeapHybridSampler.
+            Returns a dictionary in which subsets are the key of the dictionary, and their
+            corresponding value is 1 if that subset is selected, 0 otherwise. 
+        """
         sampler = LeapHybridSampler(solver={'category': 'hybrid'})
         sampleset = sampler.sample(self.bqm, label="Set Packing")
         return sampleset
     
     def sample_composite(self):
+        
+        """
+            This method resolves this problem by using the LeapHybridSampler. It shows the inspector screen.
+            Returns a dictionary in which subsets are the key of the dictionary, and their
+            corresponding value is 1 if that subset is selected, 0 otherwise. 
+        """
         sampler = EmbeddingComposite(DWaveSampler(solver={'topology__type': 'chimera'}))
         sampleset = sampler.sample(self.bqm, label="Set Packing")
         show(sampleset) 
@@ -53,10 +66,10 @@ class SetPackingProblem:
 
 def read_sanitized_file(filename):
     """
-    This method receives input from a file, verifies if it is consistent and constructs a list of instances of the class SetPackingProblem.
-    Returns a list of instances of the class SetPackingProblem, if problems are correctly inserted.
-    Throws a ValueError exception if data type is not consistent.
-    Throws a json.decoder.JSONDecodeError exception if file is not correctly encoded.
+        This method receives input from a file, verifies if it is consistent and constructs a list of instances of the class SetPackingProblem.
+        Returns a list of instances of the class SetPackingProblem, if problems are correctly inserted.
+        Throws a ValueError exception if data type is not consistent.
+        Throws a json.decoder.JSONDecodeError exception if file is not correctly encoded.
     """
     with open(filename, "r") as f:
         data = json.load(f)
