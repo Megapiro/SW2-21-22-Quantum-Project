@@ -3,6 +3,7 @@ from dwave.system import DWaveSampler
 from dwave.system import LeapHybridSampler
 from dwave.system import EmbeddingComposite
 from dwave.inspector import *
+
 import json
 import JSONGenerator
 
@@ -26,11 +27,9 @@ class SetPackingProblem:
         self.c = constraints
 
     def prepare(self):
-        """
-            This method prepares the resolution of this problem by using the BQM API of D-Wave Leap.
-            Returns the problem itself. a dictionary in which subsets are the key of the dictionary, and their
-            corresponding value is 1 if that subset is selected, 0 otherwise.
-        """
+        """This method solves this problem by using the BQM API of D-Wave Leap.
+            Returns a dictionary in which subsets are the key of the dictionary, and their
+            corresponding value is 1 if that subset is selected, 0 otherwise."""
         self.bqm = BinaryQuadraticModel({}, {}, 0, 'BINARY')
         for i in range(len(self.s)):
             self.bqm.offset += 1
@@ -42,34 +41,31 @@ class SetPackingProblem:
         return self
 
     def sample_hybrid(self):
-        """
-            This method resolves this problem by using the LeapHybridSampler.
-            Returns a dictionary in which subsets are the key of the dictionary, and their
-            corresponding value is 1 if that subset is selected, 0 otherwise. 
-        """
         sampler = LeapHybridSampler(solver={'category': 'hybrid'})
         sampleset = sampler.sample(self.bqm, label="Set Packing")
         return sampleset
     
-    def sample_composite(self):
-        
-        """
-            This method resolves this problem by using the LeapHybridSampler. It shows the inspector screen.
-            Returns a dictionary in which subsets are the key of the dictionary, and their
-            corresponding value is 1 if that subset is selected, 0 otherwise. 
-        """
+    def sample_composite(self, show_inspector = False):
         sampler = EmbeddingComposite(DWaveSampler(solver={'topology__type': 'chimera'}))
         sampleset = sampler.sample(self.bqm, label="Set Packing")
-        show(sampleset) 
+        if show_inspector:
+            show(sampleset) 
+        return sampleset
+    
+    def sample_advantage(self, show_inspector = False):
+        sampler = EmbeddingComposite(DWaveSampler())
+        sampleset = sampler.sample(self.bqm, label="Set Packing")
+        if show_inspector:
+            show(sampleset) 
         return sampleset
 
 
 def read_sanitized_file(filename):
     """
-        This method receives input from a file, verifies if it is consistent and constructs a list of instances of the class SetPackingProblem.
-        Returns a list of instances of the class SetPackingProblem, if problems are correctly inserted.
-        Throws a ValueError exception if data type is not consistent.
-        Throws a json.decoder.JSONDecodeError exception if file is not correctly encoded.
+    This method receives input from a file, verifies if it is consistent and constructs a list of instances of the class SetPackingProblem.
+    Returns a list of instances of the class SetPackingProblem, if problems are correctly inserted.
+    Throws a ValueError exception if data type is not consistent.
+    Throws a json.decoder.JSONDecodeError exception if file is not correctly encoded.
     """
     with open(filename, "r") as f:
         data = json.load(f)
@@ -183,8 +179,20 @@ def get_sanitized_input():
                 print(e)
             continue
 
-JSONGenerator.generate('SorrentinoTonnarelliVenere/data.json', 4)
 
-problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
-print(problem.prepare().sample_composite())
+#JSONGenerator.generate('SorrentinoTonnarelliVenere/data.json', 4)
+
+#problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
+#print(problem.prepare().sample_composite())
+
+with open('SorrentinoTonnarelliVenere/complete_1try.txt', 'w') as f:
+    
+    for i in range(162, 166, 1):
+        JSONGenerator.generate('SorrentinoTonnarelliVenere/data.json', i)
+
+        problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
+        sampleset = problem.prepare().sample_advantage()
+        f.write(f"{i}: {str(sampleset.info['timing'])}\n")
+        print(f"step: {i}")
+    f.close()
 
