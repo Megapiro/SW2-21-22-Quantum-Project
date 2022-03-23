@@ -19,9 +19,10 @@ Nowadays the state of the art of quantum computing is characterized by the so-ca
 ## Plan
 | Phase | State |
 | ------------ | -- |
-| Basic overview of quantum computing world | 📖|
+| Basic overview of quantum computing world | ✅|
 | Implementation of basic algorithms | 📖|
-| Collect detailed information related to our scope |  |
+| Attending "Introduction to Quantum Computing" course |  📖 |
+| Collect detailed information related to our scope |📖 |
 | Design the idea | |
 | Implement the algorithm | |
 | Collect the results | |
