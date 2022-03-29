@@ -21,3 +21,4 @@ Students involved in the project:
 
 # References
 All the documents used since last update are available in the folder named [Papers](https://github.com/Megapiro/SW2-21-22-Quantum-Project/tree/main/Taborelli-Gori/Papers)
+More material is provided in the folder named [Papers](https://github.com/Megapiro/SW2-21-22-Quantum-Project/tree/main/Taborelli-Gori/ItQC)
