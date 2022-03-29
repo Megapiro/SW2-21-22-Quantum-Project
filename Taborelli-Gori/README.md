@@ -10,8 +10,9 @@ Students involved in the project:
 
 | Task | Status | 
 | ---  | --- |
-| QC's literature review | ![Progress](https://progress-bar.dev/10/?title=Paused) | 
-| Introduction to Quantum computing Course | ![Progress](https://progress-bar.dev/85/?title=Paused) | 
+| QC's literature review | ![Progress](https://progress-bar.dev/10/?title=InProgress) | 
+| Introduction to Quantum computing Course | ![Progress](https://progress-bar.dev/85/?title=InProgress) | 
+| Reasearch line decision | ![Progress](https://progress-bar.dev/85/?title=ToDo) | 
 | Problem analysis | ![Progress](https://progress-bar.dev/0/?title=ToDo) |
 | Learning Qiskit SDK | ![Progress](https://progress-bar.dev/0/?title=ToDo) |
 | Algorithm(s) implementation | ![Progress](https://progress-bar.dev/0/?title=ToDo) |
