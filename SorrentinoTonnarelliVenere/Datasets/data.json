@@ -1,0 +1,18 @@
+[{
+    "subsets": [
+        {
+            "name": "x1",
+            "weight": 10
+        },
+        {
+            "name": "x2"
+        }
+    ],
+    "constraints": [
+        {
+            "sets": ["x1", "x2"]
+        }
+    ]
+}
+
+]
