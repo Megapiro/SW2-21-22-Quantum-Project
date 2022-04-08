@@ -11,7 +11,7 @@ Students involved in the project:
 | Task | Status | 
 | ---  | --- |
 | QC's literature review | ![Progress](https://progress-bar.dev/30/?title=InProgress) | 
-| Introduction to Quantum computing Course | ![Progress](https://progress-bar.dev/85/?title=InProgress) | 
+| Introduction to Quantum computing Course | ![Progress](https://progress-bar.dev/100/?title=Done) | 
 | Reasearch line decision | ![Progress](https://progress-bar.dev/20/?title=InProgress) | 
 | Problem analysis | ![Progress](https://progress-bar.dev/0/?title=ToDo) |
 | Learning Qiskit SDK | ![Progress](https://progress-bar.dev/0/?title=ToDo(maybe)) |
