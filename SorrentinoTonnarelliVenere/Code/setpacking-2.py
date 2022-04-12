@@ -3,7 +3,8 @@ from dwave.system import DWaveSampler
 from dwave.system import LeapHybridSampler
 from dwave.system import EmbeddingComposite
 from dwave.inspector import *
-
+from dwave.embedding.chimera import *
+from dwave.embedding.chain_strength import *
 import json
 import JSONGenerator
 
@@ -45,16 +46,18 @@ class SetPackingProblem:
         sampleset = sampler.sample(self.bqm, label="Set Packing")
         return sampleset
     
-    def sample_composite(self, show_inspector = False):
+    def sample_composite(self, show_inspector = False, pre_factor = 2.0, num_of_reads = 100):
         sampler = EmbeddingComposite(DWaveSampler(solver={'topology__type': 'chimera'}))
-        sampleset = sampler.sample(self.bqm, label="Set Packing")
+        chain_strength = uniform_torque_compensation(self.bqm, sampler, pre_factor)
+        sampleset = sampler.sample(self.bqm, chain_strength, label="Set Packing", num_reads = num_of_reads)
         if show_inspector:
             show(sampleset) 
         return sampleset
     
-    def sample_advantage(self, show_inspector = False):
+    def sample_advantage(self, show_inspector = False, pre_factor = 2.0, num_of_reads = 100):
         sampler = EmbeddingComposite(DWaveSampler())
-        sampleset = sampler.sample(self.bqm, label="Set Packing")
+        chain_strength = uniform_torque_compensation(self.bqm, sampler, pre_factor)
+        sampleset = sampler.sample(self.bqm, chain_strength, label="Set Packing", num_reads = num_of_reads)
         if show_inspector:
             show(sampleset) 
         return sampleset
@@ -185,18 +188,48 @@ def get_sanitized_input():
 #problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
 #print(problem.prepare().sample_composite())
 
-"""
-with open('SorrentinoTonnarelliVenere/complete_1try.txt', 'w') as f:
-    
-    for i in range(162, 166, 1):
-        JSONGenerator.generate('SorrentinoTonnarelliVenere/data.json', i)
+def test_comp(comp_prefix, num_files = 10):
+    for j in range(num_files):
+        with open(f'{comp_prefix}{j+1}.txt', 'w') as f:
+            for i in range(1, 61, 1):
+                JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/temp.json', i)
+                problem = read_sanitized_file('SorrentinoTonnarelliVenere/temp.json')[0]
+                sampleset = problem.prepare().sample_composite(pre_factor = 2.0, num_of_reads = 100)
+                max_energy = sampleset.first.energy
+                for datum in sampleset.data():
+                    if max_energy < datum.energy:
+                        max_energy = datum.energy
+                f.write(f"{i}: min_energy: {sampleset.first.energy}, max_energy: {max_energy}, {str(sampleset.info['timing'])}\n")
+                print(f"file composite #{j}, step #{i}")
+            f.close()
 
-        problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
-        sampleset = problem.prepare().sample_advantage()
-        f.write(f"{i}: {str(sampleset.info['timing'])}\n")
-        print(f"step: {i}")
-    f.close()
-    """
+def test_adv(adv_prefix, num_files = 10):
+    for j in range(num_files):
+        with open(f'{adv_prefix}{j+1}.txt', 'w') as f:
+            for i in range(1, 151, 1):
+                JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/temp.json', i)
+                problem = read_sanitized_file('SorrentinoTonnarelliVenere/temp.json')[0]
+                sampleset = problem.prepare().sample_advantage(pre_factor = 2.0, num_of_reads = 100)
+                max_energy = sampleset.first.energy
+                for datum in sampleset.data():
+                    if max_energy < datum.energy:
+                        max_energy = datum.energy
+                f.write(f"{i}: min_energy: {sampleset.first.energy}, max_energy: {max_energy}, {str(sampleset.info['timing'])}\n")
+                print(f"file advantage #{j}, step #{i}")
+            f.close()
+
+def test_comp_and_adv(comp_prefix, adv_prefix, num_files = 10):
+    test_comp(comp_prefix, num_files)
+    test_adv(adv_prefix, num_files)
+
+#test_comp(comp_prefix = 'SorrentinoTonnarelliVenere/Datasets/Composite/try_', num_files = 10)
+#test_adv(adv_prefix = 'SorrentinoTonnarelliVenere/Datasets/Advantage/try_', num_files = 10)       
+"""
+test_comp_and_adv(comp_prefix = 'SorrentinoTonnarelliVenere/Datasets/Composite/try_', \
+                    adv_prefix = 'SorrentinoTonnarelliVenere/Datasets/Advantage/try_', \
+                    num_files = 10)
+
+
 for i in range(1, 160, 1):
     JSONGenerator.generate('SorrentinoTonnarelliVenere/data.json', i)
     problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
@@ -210,3 +243,18 @@ for i in range(1, 160, 1):
         a.write(f"{i}: {str(sampleset.info['timing'])}\n")
         a.close()
 
+#JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/dataComposite.json',150 )
+
+problem = read_sanitized_file('SorrentinoTonnarelliVenere/Datasets/dataComposite.json')[0]
+sampleset = problem.prepare().sample_composite(True)
+
+max = sampleset.first.energy
+for datum in sampleset.data():
+    if max < datum.energy:
+        max = datum.energy
+print(f"energy = {sampleset.last.energy}")
+
+problem = read_sanitized_file('SorrentinoTonnarelliVenere/Datasets/dataComposite.json')[0]
+sampleset = problem.prepare().sample_composite(True)
+print(str(sampleset.info['timing']))
+"""
