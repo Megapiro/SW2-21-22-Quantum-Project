@@ -193,14 +193,14 @@ def test_comp(comp_prefix, num_files = 10):
         with open(f'{comp_prefix}{j+1}.txt', 'w') as f:
             for i in range(1, 61, 1):
                 JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/temp.json', i)
-                problem = read_sanitized_file('SorrentinoTonnarelliVenere/temp.json')[0]
+                problem = read_sanitized_file('SorrentinoTonnarelliVenere/Datasets/temp.json')[0]
                 sampleset = problem.prepare().sample_composite(pre_factor = 2.0, num_of_reads = 100)
                 max_energy = sampleset.first.energy
                 for datum in sampleset.data():
                     if max_energy < datum.energy:
                         max_energy = datum.energy
                 f.write(f"{i}: min_energy: {sampleset.first.energy}, max_energy: {max_energy}, {str(sampleset.info['timing'])}\n")
-                print(f"file composite #{j}, step #{i}")
+                print(f"file composite #{j+1}, step #{i}")
             f.close()
 
 def test_adv(adv_prefix, num_files = 10):
@@ -208,14 +208,14 @@ def test_adv(adv_prefix, num_files = 10):
         with open(f'{adv_prefix}{j+1}.txt', 'w') as f:
             for i in range(1, 151, 1):
                 JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/temp.json', i)
-                problem = read_sanitized_file('SorrentinoTonnarelliVenere/temp.json')[0]
+                problem = read_sanitized_file('SorrentinoTonnarelliVenere/Datasets/temp.json')[0]
                 sampleset = problem.prepare().sample_advantage(pre_factor = 2.0, num_of_reads = 100)
                 max_energy = sampleset.first.energy
                 for datum in sampleset.data():
                     if max_energy < datum.energy:
                         max_energy = datum.energy
                 f.write(f"{i}: min_energy: {sampleset.first.energy}, max_energy: {max_energy}, {str(sampleset.info['timing'])}\n")
-                print(f"file advantage #{j}, step #{i}")
+                print(f"file advantage #{j+1}, step #{i}")
             f.close()
 
 def test_comp_and_adv(comp_prefix, adv_prefix, num_files = 10):
