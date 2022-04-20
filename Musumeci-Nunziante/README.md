@@ -20,19 +20,15 @@ Nowadays the state of the art of quantum computing is characterized by the so-ca
 | Phase | State |
 | ------------ | -- |
 | Basic overview of quantum computing world | ✅|
-| Implementation of basic algorithms | 📖|
-| Attending "Introduction to Quantum Computing" course |  📖 |
+| Implementation of basic algorithms | ✅|
+| Attending "Introduction to Quantum Computing" course |  ✅ |
 | Collect detailed information related to our scope |📖 |
-| Design the idea | |
+| Design the idea |✅ |
 | Implement the algorithm | |
 | Collect the results | |
-| Write the paper | |
+| Write the paper |📖|
 
  📖 = In progress <br />
  ✅ = Done <br />
  ❓= Questions about
-
- ### References read
-
- - An Introduction to Quantum Computing without the Physics [Nannicini, 2020]
  
