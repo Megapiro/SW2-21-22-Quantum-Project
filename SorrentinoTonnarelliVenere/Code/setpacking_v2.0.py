@@ -42,11 +42,22 @@ class SetPackingProblem:
         return self
 
     def sample_hybrid(self):
+        """
+            This method does the sampling of this problem, by using the LeapHybridSampler.
+            It must be called after the prepare() method."""
         sampler = LeapHybridSampler(solver={'category': 'hybrid'})
         sampleset = sampler.sample(self.bqm, label="Set Packing")
         return sampleset
     
     def sample_composite(self, show_inspector = False, pre_factor = 2.0, num_of_reads = 100):
+        """
+            This method does the sampling of this problem, by using the 2000Q platform and DWaveSampler.
+            It must be called after the prepare() method.
+            Params:
+                show_inspector: boolean, if set to True the inspector screen is shown;
+                pre_factor: a parameter required by the function used to set the chain strength for the sampling;
+                num_of_reads: number of samples asked to the solver.
+                """
         sampler = EmbeddingComposite(DWaveSampler(solver={'topology__type': 'chimera'}))
         chain_strength = uniform_torque_compensation(self.bqm, sampler, pre_factor)
         sampleset = sampler.sample(self.bqm, chain_strength, label="Set Packing", num_reads = num_of_reads)
@@ -55,13 +66,19 @@ class SetPackingProblem:
         return sampleset
     
     def sample_advantage(self, show_inspector = False, pre_factor = 2.0, num_of_reads = 100):
+        """
+            This method does the sampling of this problem, by using the Advantage platform and DWaveSampler.
+            It must be called after the prepare() method.
+            Params:
+                show_inspector: boolean, if set to True the inspector screen is shown;
+                pre_factor: a parameter required by the function used to set the chain strength for the sampling;
+                num_of_reads: number of samples asked to the solver."""
         sampler = EmbeddingComposite(DWaveSampler())
         chain_strength = uniform_torque_compensation(self.bqm, sampler, pre_factor)
         sampleset = sampler.sample(self.bqm, chain_strength, label="Set Packing", num_reads = num_of_reads)
         if show_inspector:
             show(sampleset) 
         return sampleset
-
 
 def read_sanitized_file(filename):
     """
@@ -182,16 +199,17 @@ def get_sanitized_input():
                 print(e)
             continue
 
-
-#JSONGenerator.generate('SorrentinoTonnarelliVenere/data.json', 4)
-
-#problem = read_sanitized_file('SorrentinoTonnarelliVenere/data.json')[0]
-#print(problem.prepare().sample_composite())
-
 def test_comp(comp_prefix, num_files = 10):
+    """
+        This method does testing for the 2000Q platform. 
+        It runs num_files experiments, for each of which it prints out the result on a separate file.
+        Each experiment generates random problems with N subsets varying from 1 up to 60 included.
+        Params:
+            comp_prefix: prefix of file names, to which an increment number is added;
+            num_files: number of files to print (and thus, number of experiments to run)."""
     for j in range(num_files):
-        with open(f'{comp_prefix}{j+1}.txt', 'w') as f:
-            for i in range(1, 61, 1):
+        for i in range(1, 61, 1):
+            with open(f'{comp_prefix}{j+1}.txt', 'a') as f:
                 JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/temp.json', i)
                 problem = read_sanitized_file('SorrentinoTonnarelliVenere/Datasets/temp.json')[0]
                 sampleset = problem.prepare().sample_composite(pre_factor = 2.0, num_of_reads = 100)
@@ -204,9 +222,16 @@ def test_comp(comp_prefix, num_files = 10):
             f.close()
 
 def test_adv(adv_prefix, num_files = 10):
+    """
+        This method does testing for the Advantage platform. 
+        It runs num_files experiments, for each of which it prints out the result on a separate file.
+        Each experiment generates random problems with N subsets varying from 1 up to 150 included.
+        Params:
+            adv_prefix: prefix of file names, to which an increment number is added;
+            num_files: number of files to print (and thus, number of experiments to run)."""
     for j in range(num_files):
-        with open(f'{adv_prefix}{j+1}.txt', 'w') as f:
-            for i in range(1, 151, 1):
+        for i in range(1, 151, 1):
+            with open(f'{adv_prefix}{j+1}.txt', 'a') as f:
                 JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/temp.json', i)
                 problem = read_sanitized_file('SorrentinoTonnarelliVenere/Datasets/temp.json')[0]
                 sampleset = problem.prepare().sample_advantage(pre_factor = 2.0, num_of_reads = 100)
@@ -219,12 +244,37 @@ def test_adv(adv_prefix, num_files = 10):
             f.close()
 
 def test_comp_and_adv(comp_prefix, adv_prefix, num_files = 10):
+    """
+        This method does testing for the 2000Q AND Advantage platform. 
+        It runs num_files experiments for both platforms, and for each experiment it prints out the result on a separate file.
+        Each experiment generates random problems with N subsets varying from 1 up to 60 included (for 2000Q) and up to 150 included (for Advantage).
+        Params:
+            comp_prefix: prefix of file names for 2000Q, to which an increment number is added;
+            adv_prefix: prefix of file names for Advantage, to which an increment number is added;
+            num_files: number of files to print (and thus, number of experiments to run for each platform)."""
     test_comp(comp_prefix, num_files)
     test_adv(adv_prefix, num_files)
 
-#test_comp(comp_prefix = 'SorrentinoTonnarelliVenere/Datasets/Composite/try_', num_files = 10)
-#test_adv(adv_prefix = 'SorrentinoTonnarelliVenere/Datasets/Advantage/try_', num_files = 10)       
+def print_qubits_info(sampleset):
+    """
+        This method prints out number of logical variables and number of physical qubits used in embedding for the given sampleset.
+        Params: 
+            sampleset: the sampleset for which to print out qubits info"""
+    embedding = sampleset.info['embedding_context']['embedding']
+    print(f"Number of logical variables: {len(embedding.keys())}")
+    print(f"Number of physical qubits used in embedding: {sum(len(chain) for chain in embedding.values())}")
+
 """
+#USAGE EXAMPLES:
+
+JSONGenerator.generate('SorrentinoTonnarelliVenere/Datasets/temp.json', 20)
+problem = read_sanitized_file('SorrentinoTonnarelliVenere/Datasets/temp.json')[0]
+sampleset = problem.prepare().sample_advantage(pre_factor = 2.0, num_of_reads = 100)
+print_qubits_info(sampleset)
+
+#test_comp(comp_prefix = 'SorrentinoTonnarelliVenere/Datasets/Composite/try', num_files = 1)
+#test_adv(adv_prefix = 'SorrentinoTonnarelliVenere/Datasets/Advantage/try_', num_files = 3)       
+
 test_comp_and_adv(comp_prefix = 'SorrentinoTonnarelliVenere/Datasets/Composite/try_', \
                     adv_prefix = 'SorrentinoTonnarelliVenere/Datasets/Advantage/try_', \
                     num_files = 10)
