@@ -4,27 +4,23 @@ QNLP is a branch of quantum computing that focuses on natural language processin
 The advantage of using QC instead of classical computing in NLP problems is that NLP is quantum native. 
 Pictorial representation is largely used in this field instead classical mathematics.
 
-## Progress
+# Progress
 
-### In progress:
+## In progress:
 
-Topics being studied:
-* quantum computing basics;
-* NLP;
-* QNLP.
+* Writing Latex document (theory part almost complete)
+* Working on ipynb about classical and quantum training using lambeq.
 
-### Completed:
+## Completed:
 
 Material studied:
-* introductory videos on slack about quantum computing;
-* udemy lecture on QNLP.
+* introductory videos on slack about quantum computing
+* udemy lecture on QNLP
+* Bob Coecke's conferences recorded on YoTube
+* papers and web sites about DisCoCat, pregroup grammar, z-x calculus and NLP.
 
-### Notes:
+# Personal info: 
 
-* I found out one of the most relevant people in QNLP is Bob Coecke, which took conferences that are now shared on YouTube.
-
-## Personal info: 
-
-Email: stefano.vighini@mail.polimi.it
-Person code: 10622788
-Badge number: 995662
+Email: stefano.vighini@mail.polimi.it <br/>
+Person code: 10622788 <br/>
+Badge number: 995662 <br/>
