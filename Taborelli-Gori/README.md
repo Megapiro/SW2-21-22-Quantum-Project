@@ -16,12 +16,12 @@ Students involved in the project:
 | ---  | --- |
 | QC's literature review | ![Progress](https://progress-bar.dev/80/?title=InProgress) | 
 | Introduction to Quantum computing Course | ![Progress](https://progress-bar.dev/100/?title=Done) | 
-| Reasearch line decision | ![Progress](https://progress-bar.dev/100/?title=InProgress) | 
-| Problem analysis | ![Progress](https://progress-bar.dev/100/?title=ToDo) |
-| Learning Qiskit SDK | ![Progress](https://progress-bar.dev/50/?title=ToDo(maybe)) |
-| Algorithm(s) implementation | ![Progress](https://progress-bar.dev/20/?title=ToDo(maybe)) |
-| Conclusions of the analysis | ![Progress](https://progress-bar.dev/30/?title=ToDo) |
-| redaction of the paper | ![Progress](https://progress-bar.dev/30/?title=ToDo) |
+| Reasearch line decision | ![Progress](https://progress-bar.dev/100/?title=Done) | 
+| Problem analysis | ![Progress](https://progress-bar.dev/100/?title=Done) |
+| Learning Qiskit SDK | ![Progress](https://progress-bar.dev/50/?title=InProgress) |
+| Algorithm(s) implementation | ![Progress](https://progress-bar.dev/20/?title=InProgress) |
+| Conclusions of the analysis | ![Progress](https://progress-bar.dev/30/?title=InProgress) |
+| redaction of the paper | ![Progress](https://progress-bar.dev/30/?title=InProgress) |
 
 # References
 All the documents used since last update are available in the folder named [Papers](https://github.com/Megapiro/SW2-21-22-Quantum-Project/tree/main/Taborelli-Gori/Papers)
