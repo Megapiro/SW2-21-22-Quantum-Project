@@ -7,15 +7,57 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{colortbl}
 \usepackage[official]{eurosym}
+\usepackage[margin=1.5in]{geometry}    % For margin alignment
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{amssymb}
+\usepackage{arevmath}     % For math symbols
+\usepackage[noend]{algpseudocode}
 %margins
 \setlength\textwidth{16.5cm}      %
 \setlength\textheight{22.7cm}     % [a4: 21cm x 29.7cm]
 \setlength\oddsidemargin{-0.4cm}  %
 \setlength\topmargin{-2.5cm}        %
 \setlength\footskip{1.5cm}          %
-\setlength{\parindent}{0pt}
 %
+\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
 
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
 \usepackage{authblk}
 \usepackage{tabu}
 \usepackage{tabularx}
@@ -43,20 +85,119 @@ Abstract of the paper. Abstract of the paper. Abstract of the paper. Abstract of
 \keywords{one, two, three, four}
 
 \section{Introduction}
+Over the past forty years, the frontiers of computer science are focused on developing more and more effective machines with an extremely high computational power: quantum computers. From the very beginning of the ‘80s, when Paul Benioff proposed the first model of the quantic touring machine, several improvements have been reached. Nowadays, one of the most promising machines is the quantum annealer, which aims to heuristically solve difficult combinatorial optimization problems. To show the possibilities of this technology, in the present article a possible solution for the Set Packing Problem is shown. Even if it is extremely famous in literature and several solutions have been proposed using classical computers, in the algorithm presented later two different kinds of quantum annealers have been used and their results have been compared.
+To execute the algorithm, the quantum annealers of D-Wave have been used \cite{article1}.In particular, we used Leap,a real-time Quantum Application Environment. It is a cloud-based platform giving application developers real-time access to a quantum computer. Here, two powerful quantum annealers are available: the 2000Q and the Advantage. They are controllable supercomputer that works at extremely low temperature. In particular: 
+\begin{itemize}
+    \item \textbf{the 2000Q} has a footprint of approximately 10' x 7' x 10' (L x W x H). Its physical enclosure houses sophisticated cryogenic refrigeration, shielding, and I/O systems to support a single thumbnail-sized QPU.  Most of the physical volume of the system is required to accommodate the refrigeration system 
+and to provide easy service access.  For quantum effects to play a role in computation, the QPU requires an extreme, isolated environment. It works at a temperature of 15 mK and it has up to 2048 qubits and 6016 couplers.
+    \item \textbf{the Advantage} system is the first and only quantum computer designed for business. 
+It is the 5th generation Advantage quantum computer that was built from the ground up with 
+a new processor architecture with over 5,000 qubits and 15-way qubit connectivity, empowering enterprises to solve their largest and most complex business problems. The main strength of the advantage Is the higher number of qubits, which makes it computationally more powerful than the 2000Q while the main drawback is the high noise which affects its data.
+\end{itemize}
+In the first section of this paper, the Set Packing Problem the specific formalization provided by Glover for quantum computing\cite{Website1} is better described. Then, there is a description of the algorithm and of the formal descriptive paradigm used. The format described was essential to implement a problem generator for testing. After this, in the third part of the paper, the results of our experiment have been shown to highlight the effectiveness of both machines while in the last part there is a comparison between them to put a spotlight on the strengths and drawbacks.
+
 \section{The Set Packing Problem}
+
+
+The focus of our research is the set packing problem. It is a combinatorial optimization problem which has been extensively studied in the past recent years[]. The formulation of the problem is the following: given a set of n finite sets, a packing is a collection of all the sets among the n ones which are mutually disjoint. The main objective of the problem is to find the packing of the maximum size[]. Set packing is an NP-hard maximization problem. Here follows the problem formalization given by Glover []:
+
+
+\centerline{${ max {\sum_{j=1}^{n}w_jx_j}}$}
+\centerline{
+st
+}
+
+\centerline{${\sum_{j=1}^{n}a_ijxj \leq 1 \forall j \in 1..m}$}
+
+\setlength\parindent{0pt}where ${a_ij}$ are 0/1 coefficients, ${w_j}$ are weights and ${x_j}$ variable are binary.
+
+
+
+\setlength\parindent{10pt}In order to make the algorithm work on the quantum annealer, it is necessary to reformulate the problem as a QUBO model, which is the acronym of Quadratic Unconstrained Binary Optimization problem. The QUBO model is a special framework specifically designed for Combinatorial Optimization problems. In these kind of problems, a large number of decision must be made and these decisions yield to a corresponding objective function value. QUBO models belong to the class of NP-hard problems. For this reason, finding the optimal solution of such a problem might be unfeasible as the size of the instance increases. However, it is possible to find very good but not necessarily optimal solution in a reasonable amount of computational time.
+The idea behind the QUBO formulation is use the following objective function:\\
+\centerline{${minimize/maximize\; y = x^tQx}$}\\
+where x a vector of binary decision variables and Q is a square matrix (symmetric or upper triangular) of constraints. The constraints of a traditional optimization problem become, in the QUBO model, a set of quadratic penalties introduced in the previously mentioned objective function. The penalties are structured in a way that they are equal to zero for feasible solutions or equal to some positive amount for unfeasible solutions. For the Set Packing problem, we obtained the following QUBO representation: \centerline{${max\; x^tQx}$}.
+
+In order to achieve our objectives, we implemented the set packing problem using the Leap platform provided by D-wave systems, where we used a built in function which is able to map a traditional optimization problem into a QUBO model in such a way that it can be run on the quantum annealer.
+
 \section{The Algorithm}
+The definition of the algorithm for the solution of a generic Set Packing problem has been based on the platform and libraries developed by D-Wave (i.e., Leap IDE [] and D-Wave System respectively). The testing has been focused on two different quantum annealers: 2000Q and Advantage.
+
+Firstly, it was necessary to define a formal descriptive paradigm of a Set packing problem, able to rigorously express all the subsets belonging to the set and the related constraints, according to the Grover formalization. 
+
+Secondly, the first phase of the development of the algorithm has started, in which the code has been tested on a single instance of the problem, for both architectures, and the spatial and time complexities have been analysed.
+
+Subsequently, the second phase has taken place, in which the parameters of the algorithm have been tuned by executing several experiments, for both architectures. Spatial and time complexities have been studied, and compared to the previous ones. 
+\subsection{The problem format and generator}
+In order to elaborate an effective algorithm for the solution of a generic Set Packing problem, a formal paradigm has been defined, aiming at describing the instance of the problem, with the subsets and their weights, as well as all the constraints that exist among them.
+
+During the definition of such a format, priority has been given to two important language characteristics:
+\begin{enumerate}
+    \item \textbf{expressiveness}: the chosen language should be able to express, in a clear and concise way, all the features of the problem, so as to be, at the same time, human-readable and unambiguous;
+    \item \textbf{scripting-compliance}: the chosen language should be thoroughly supported by the standard libraries of the majority of the scripting languages, in order to ease its use and spreading. In additiong, being scripting-compliant also reduces the probability of the presence of vulnerabilities and errors in the code related to translation, for standard libraries are widely tested against such risks;
+    \item \textbf{parsing speed}: the chosen language should be parsable very fast, as it will be used very extensively.
+\end{enumerate}
+After an extensive analysis, it has been decided that the most convenient format to adopt is JSON (JavaScript Object Notation, []), as it is strongly expressive, widely supported by the majority of scripting languages, and parsable at high velocity [\url{https://lemire.me/blog/2018/05/03/how-fast-can-you-parse-json/}].
+
+In particular, the generic format is defined as an array of objects, each of which describes an instance of a problem. The usage of arrays allows for multiple instances to be considered at the same time. Each of these objects contains two fields: \textit{subsets}, which is an array of the subsets belonging to the set, and \textit{constraints}, which is an aray of the constraints among the subsets. 
+
+The subsets are defined as object, containing a \textit{name}, which is a string, and a \textit{weight}, which is a number, and is optional (its default value is 1). The constraints are objects as well, containing an attribute \textit{sets}, that is an array of string, each referring to a previously defined set.
+
+An example of an instance of the problem is the following: 
+
+\begin{lstlisting}[language=json,firstnumber=1]
+[{
+    "subsets": 
+        [
+            {"name": "1E8", "weight": 8},
+            {"name": "Z7MF"},
+            {"name": "F", "weight": 6},
+            {"name": "B", "weight": 6},
+            {"name": "1MS8", "weight": 5},
+            {"name": "ZI"}
+        ],
+    "constraints":
+        [
+            {"sets": ["B", "ZI"]},
+            {"sets": ["1MS8", "ZI", "F"]},
+            {"sets": ["1E8", "B", "Z7MF", "F", "1MS8", "ZI"]}
+        ]
+}]
+\end{lstlisting}
+
+Once the format has been defined, a script has been written in order to generate random instances of a set packing problem. Since, for complexity analysis, it is necessary to control the size of the instance (i.e., the number of subsets considered in the problem), such a parameter is the input of the script. The procedure returns a file containing the instance of the problem, written as the format described above prescribes.
+
+\begin{algorithm}
+\caption{Set Packing Problem generator}
+\begin{algorithmic}[1]
+
+\Procedure{GenerateSetPackingProblem}{$filename, $N}      
+
+    \State set S := \varnothing  \Comment{Set of subsets names}
+    \State set W := \varnothing  \Comment{Set of subsets weights}
+    \State set C := \varnothing  \Comment{Set of constraints}
+    \While{size(S) \not= $N }  
+        \State S \leftarrow random$\_$string()   \Comment{Create random subset name}
+        \State W \leftarrow random$\_$number$\_$or$\_$null()  \Comment{Create random optional subset weight}
+    \EndWhile  \label{loop}
+    \State int size$\_$of$\_$C \leftarrow random$\_$positive$\_$up$\_$to$\_$($N)  \Comment{generate random size of C}
+    \While{size(C) \not= $size$\_$of$\_$C}  
+        \State C \leftarrow random$\_$constraint$\_$from$\_$subsets(S)  \Comment{Create random constraint from defined subsets}
+    \EndWhile  \label{loop1}
+    \State json J \leftarrow create$\_$JSON$(S, W, C) $ \Comment{Create JSON object from given sets, by using defined format} 
+    \State file F \leftarrow create$\_$file($filename, J); $ \Comment{Create file with content J}
+    \State \Return F $ \Comment{return file}
+\EndProcedure
+
+\end{algorithmic}
+\end{algorithm}
+
 \subsection{The first phase}
+
 \subsection{The second phase}
-\section{Considerations and conclusions}
 
-
-First site: \cite{WebSite1}
-Second site: \cite{WebSite2}
-Third site: \cite{WebSite3}
-Fourth site: \cite{WebSite4}
-Fifth site: \cite{WebSite5}
-sixth site: \cite{article1}
-seventh site: \cite{article2}
+\section{Comparison}
+\section{Conclusions}
 
 \bibliographystyle{plain}
 \bibliography{refs.bib}
