@@ -88,29 +88,26 @@ Milan, Italy\\
 \begin{document}
 \maketitle
 \begin{abstract}
-In the past recent years, quantum annealers have been subject of great interest from researchers and scholars. In this paper we present our research, in which we compare the performances of the two most important quantum annealers: 2000Q and Advantage, both developed by D-Wave Systems. In particular, we implement a Set Packing Problem algorithm, and we tested its performance on both systems using increasingly complex instances of the problem. We present our results, making important considerations on time complexity, space complexity and energy of the solutions provided by the quantum annealers.
+In recent years, quantum annealers have been of great interest to researchers and scholars. Our contribution, with the present paper, is a comparison of the performance of the two most important D-Wave quantum annealers: 2000Q and Advantage, as well as the development of a Set Packing Problem algorithm. We test its efficiency on both systems using increasingly complex instances of the problem. We present our results, making important considerations on time and space complexity, as well as the energy of the solutions provided by the quantum annealers.
 \end{abstract}
 
-\keywords{2000Q, Advantage, Set Packing, qubit, complexity}
+\keywords{2000Q, Advantage, Set Packing, quantum annealing, complexity, D-Wave}
 
 \section{Introduction}
-Over the past forty years, the frontiers of computer science are focused on developing more and more effective machines with an extremely high computational power: quantum computers. From the very beginning of the ‘80s, when Paul Benioff proposed the first model of the quantic touring machine, several improvements have been reached. Nowadays, one of the most promising machines is the quantum annealer, which aims to heuristically solve difficult combinatorial optimization problems\cite{WebSite3}. To show the possibilities of this technology, in the present article a possible solution for the Set Packing Problem is shown. Even if it is extremely famous in literature and several solutions have been proposed using classical computers, in the algorithm presented later two different kinds of quantum annealers have been used and their results have been compared.
-To execute the algorithm, the quantum annealers of D-Wave have been used \cite{article1}.In particular, we used Leap,a real-time Quantum Application Environment. It is a cloud-based platform giving application developers real-time access to a quantum computer. Here, two powerful quantum annealers are available: the 2000Q and the Advantage. They are controllable supercomputer that works at extremely low temperature. In particular: 
+Over the past forty years, the frontier of information technology is focused on developing more and more effective architectures with an extremely high computational power: quantum computers. From the very beginning of the ‘80s, when Paul Benioff proposed the first model of the quantum touring machine, several improvements have been achieved. Nowadays, one of the most promising machines is the quantum annealer, which aims to heuristically solve difficult combinatorial optimization problems\cite{WebSite3}. To show the capabilities of this technology, in the present article a possible solution for the Set Packing Problem is shown. Even if it is extremely notorious in literature and several solutions have been proposed using classical computers, in the algorithm here presented two different kinds of quantum annealers have been used, and their results have been compared.
+To execute the algorithm, the quantum annealers of D-Wave have been employed \cite{article1}.In particular, we used Leap, a real-time Quantum Application Environment. It is a cloud-based platform giving application developers real-time access to a quantum computer. Here, two powerful quantum annealers are available: the 2000Q and the Advantage. They are controllable supercomputers that work at extremely low temperatures. In particular: 
 \begin{itemize}
-    \item \textbf{The dwave-hybrid} framework.
-    \item \textbf{the 2000Q} has a footprint of approximately 10' x 7' x 10' (L x W x H). Its physical enclosure houses sophisticated cryogenic refrigeration, shielding, and I/O systems to support a single thumbnail-sized QPU.  Most of the physical volume of the system is required to accommodate the refrigeration system 
-and to provide easy service access.  For quantum effects to play a role in computation, the QPU requires an extreme, isolated environment. It works at a temperature of 15 mK and it has up to 2048 qubits and 6016 couplers.
-    \item \textbf{the Advantage} system is the first and only quantum computer designed for business. 
-    It is the 5th generation Advantage quantum computer that was built from the ground up with 
-    a new processor architecture with over 5,000 qubits and 15-way qubit connectivity, empowering enterprises to solve their largest and most complex business problems. The main strength of the advantage Is the higher number of qubits, which makes it computationally more powerful than the 2000Q while the main drawback is the high noise which affects its data.
+    \item the \textbf{2000Q} has a footprint of approximately 10' x 7' x 10' (L x W x H). Its physical enclosure houses sophisticated cryogenic refrigeration, shielding, and I/O systems to support a single thumbnail-sized QPU.  Most of the physical volume of the system is required to accommodate the refrigeration plant and to provide easy service access.  For quantum effects to play a role in computation, the QPU requires an extreme, isolated environment. It works at a temperature of 15 mK and it has up to 2048 qubits and 6016 couplers;
+    \item the \textbf{Advantage} system is the first and only quantum computer designed for business. It is the 5th-generation Advantage quantum computer that was built from the ground up with a new processor with over 5,000 qubits and a 15-way qubit connectivity, empowering enterprises to solve their largest and most complex business problems. The main strength of the advantage is the higher number of qubits, which makes it computationally more powerful than the 2000Q, while the main drawback is the high noise which affects its data.
 \end{itemize}
-In addition to supercomputers, in the first phase of the project, we used also the Dwave-hybrid sampler \cite{WebSite6} in order to test the algorithm. Essentially, it is a framework which allows solving an optimization problem by decomposing it into two or more solutions which run in parallel. These solutions, using the D-Wave hybrid sampler, may or may not involve the supercomputers previously mentioned. The use of this framework allowed us to be sure about the feasibility of the algorithm. Then, we left the hybrid framework to focus on 2000Q and Advantages exclusively.
-In the first section of this paper, the Set Packing Problem the specific formalization provided by Glover for quantum computing\cite{Website1} is better described. Then, there is a description of the algorithm and of the formal descriptive paradigm used. The format described was essential to implement a problem generator for testing. After this, in the third part of the paper, the results of our experiment have been shown to highlight the effectiveness of both machines while in the last part there is a comparison between them to put a spotlight on the strengths and drawbacks.
+In addition to supercomputers, in the first phase of the project, we also used the D-Wave hybrid sampler \cite{WebSite6} to test the algorithm. Essentially, it is a framework which allows solving an optimization problem by decomposing it into two or more solutions which run in parallel. These solutions, using the D-Wave hybrid sampler, may or may not involve the supercomputers previously mentioned. The use of this framework allowed us to be certain about the feasibility of the algorithm. Then, we left the hybrid framework to exclusively focus on 2000Q and Advantage.
+
+In the first section of this paper, the Set Packing Problem, the specific formalization provided by Glover for quantum computing\cite{Website1} is deeply described. Afterwards, there is a description of the algorithm and of the format used to represent instances of the problem. The latter was essential to implement a proper problem generator for testing. Subsequently, in the fourth chapter, the results of our experiments have been shown to highlight the effectiveness of both machines. Finally, in the last section, there is a comparison between them, to put a spotlight on their strengths and drawbacks.
 
 \section{The Set Packing Problem}
 
 
-The focus of our research is the set packing problem. It is a combinatorial optimization problem which has been extensively studied in the past recent years[]. The formulation of the problem is the following: given a set of n finite sets, a packing is a collection of all the sets among the n ones which are mutually disjoint. The main objective of the problem is to find the packing of the maximum size[]. Set packing is an NP-hard maximization problem. Here follows the problem formalization given by Glover []:
+The main focus of our research is the acceleration of the resolution of a set packing problem. This is a combinatorial programming problem which has been extensively studied in recent years\cite{article3}. The formulation of the problem is the following: given a set of $N$ finite subsets, a pack is a collection of all the subsets among the $N$ ones which are mutually disjoint. The main objective of the problem is to find the packing of maximum size\cite{article2}. Set packing is an NP-complete maximization problem. Here follows the problem formalization given by Glover \cite{article1}:
 
 
 \centerline{${ max {\sum_{j=1}^{n}w_jx_j}}$}
@@ -124,35 +121,36 @@ st
 
 
 
-\setlength\parindent{10pt}In order to make the algorithm work on the quantum annealer, it is necessary to reformulate the problem as a QUBO model, which is the acronym of Quadratic Unconstrained Binary Optimization problem. The QUBO model is a special framework specifically designed for Combinatorial Optimization problems. In these kind of problems, a large number of decision must be made and these decisions yield to a corresponding objective function value. QUBO models belong to the class of NP-hard problems. For this reason, finding the optimal solution of such a problem might be unfeasible as the size of the instance increases. However, it is possible to find very good but not necessarily optimal solution in a reasonable amount of computational time.
-The idea behind the QUBO formulation is use the following objective function:\\
-\centerline{${minimize/maximize\; y = x^tQx}$}\\
-where x a vector of binary decision variables and Q is a square matrix (symmetric or upper triangular) of constraints. The constraints of a traditional optimization problem become, in the QUBO model, a set of quadratic penalties introduced in the previously mentioned objective function. The penalties are structured in a way that they are equal to zero for feasible solutions or equal to some positive amount for unfeasible solutions. For the Set Packing problem, we obtained the following QUBO representation: \centerline{${max\; x^tQx}$}.
+\setlength\parindent{10pt}In order to make the algorithm work on quantum annealers, it is necessary to reformulate the problem as a QUBO model (Quadratic Unconstrained Binary Optimization). The QUBO model is a special framework specifically designed for Combinatorial Optimization tasks. In this kind of algorithms, a large number of decisions must be made and these decisions yield a corresponding objective function value. Being the Set Packing problem NP-complete, finding the optimal solution might be unfeasible as the size of the instance increases. However, it is possible to find very good but not necessarily optimal solution in a reasonable amount of computational time.
 
-In order to achieve our objectives, we implemented the set packing problem using the Leap platform provided by D-wave systems, where we used a built in function which is able to map a traditional optimization problem into a QUBO model in such a way that it can be run on the quantum annealer.
+The idea behind the QUBO formulation is to use the following objective function:\\
+\centerline{${minimize/maximize\; y = x^tQx}$}\\
+where x is a vector of binary decision variables and Q is a square matrix (symmetric or upper triangular) of constraints. The constraints of a traditional optimization problem become, in the QUBO model, a set of quadratic penalties introduced in the previously mentioned objective function. The penalties are structured in a way that they are equal to zero for feasible solutions or equal to some positive amount for unfeasible solutions. For the Set Packing problem, we obtained the following QUBO representation: \centerline{${max\; x^tQx}$}.
+
+In order to achieve our objectives, we implemented the set packing problem using the Leap platform provided by D-wave systems, where we used a built-in function which is able to map a traditional optimization problem into a QUBO model in such a way that it can be run on quantum annealers.
 
 \section{The Algorithm}
 The definition of the algorithm for the solution of a generic Set Packing problem has been based on the platform and libraries developed by D-Wave (i.e., Leap IDE \cite{WebSite8} and D-Wave System \cite{WebSite5} respectively). The testing has been focused on two different quantum annealers: 2000Q and Advantage.
 
 Firstly, it was necessary to define a formal descriptive paradigm of a Set packing problem, able to rigorously express all the subsets belonging to the set and the related constraints, according to the Grover formalization. 
 
-Secondly, the first phase of the development of the algorithm has started, in which the code has been tested on a single instance of the problem, for both architectures, and the spatial and time complexities have been analysed.
+Secondly, the first phase of the development of the algorithm has started, in which the code has been tested on a single instance of the problem, for both architectures, and we analyzed the spatial and time complexities.
 
-Subsequently, the second phase has taken place, in which the parameters of the algorithm have been tuned by executing several experiments, for both architectures. Spatial and time complexities have been studied, and compared to the previous ones. 
+Subsequently, the second phase has taken place, in which we tuned the parameters of the algorithm by executing several experiments, for both architectures. We, therefore,  studied their space and time complexity and compared them to the previous ones. 
 \subsection{The problem format and generator}
-In order to elaborate an effective algorithm for the solution of a generic Set Packing problem, a formal paradigm has been defined, aiming at describing the instance of the problem, with the subsets and their weights, as well as all the constraints that exist among them.
+In order to elaborate an effective algorithm for the solution of a generic Set Packing problem, we defined a formal paradigm, aiming at describing the instance of the problem, with the subsets and their weights, as well as all the constraints that exist among them.
 
 During the definition of such a format, priority has been given to two important language characteristics:
 \begin{enumerate}
-    \item \textbf{expressiveness}: the chosen language should be able to express, in a clear and concise way, all the features of the problem, so as to be, at the same time, human-readable and unambiguous;
+    \item \textbf{expressiveness}: the chosen language should be able to express, clearly and concisely, all the features of the problem, so as to be, at the same time, human-readable and unambiguous;
     \item \textbf{scripting-compliance}: the chosen language should be thoroughly supported by the standard libraries of the majority of the scripting languages, in order to ease its use and spreading. In addition, being scripting-compliant also reduces the probability of the presence of vulnerabilities and errors in the code related to translation, for standard libraries are widely tested against such risks;
     \item \textbf{parsing speed}: the chosen language should be parsable very fast, as it will be used very extensively.
 \end{enumerate}
-After an extensive analysis, it has been decided that the most convenient format to adopt is JSON (JavaScript Object Notation, \cite{WebSite9}), as it is strongly expressive, widely supported by the majority of scripting languages, and parsable at high velocity \cite{WebSite7}.
+After an extensive analysis, we decided that the most convenient format to adopt is JSON (JavaScript Object Notation, \cite{WebSite9}), as it is strongly expressive, widely supported by the majority of scripting languages, and parsable at high velocity \cite{WebSite7}.
 
 In particular, the generic format is defined as an array of objects, each of which describes an instance of a problem. The usage of arrays allows for multiple instances to be considered at the same time. Each of these objects contains two fields: \textit{subsets}, which is an array of the subsets belonging to the set, and \textit{constraints}, which is an array of the constraints among the subsets. 
 
-The subsets are defined as object, containing a \textit{name}, which is a string, and a \textit{weight}, which is a number, and is optional (its default value is 1). The constraints are objects as well, containing an attribute \textit{sets}, that is an array of string, each referring to a previously defined set.
+The subsets are defined as objects, containing a \textit{name}, which is a string, and a \textit{weight}, which is a number, and is optional (its default value is 1). The constraints are objects as well, containing an attribute \textit{sets}, that is an array of strings, each referring to a previously defined set.
 
 An example of an instance of the problem is the following: 
 
@@ -176,22 +174,22 @@ An example of an instance of the problem is the following:
 }]
 \end{lstlisting}
 
-Once the format has been defined, a script has been written in order to generate random instances of a set packing problem. Since, for complexity analysis, it is necessary to control the size of the instance (i.e., the number of subsets considered in the problem), such a parameter is the input of the script. The procedure returns a file containing the instance of the problem, written as the format described above prescribes.
-
+Once the format has been defined, we wrote a script in order to generate random instances of a set packing problem. Since, for complexity analysis, it is necessary to control the size of the instance (i.e., the number of subsets considered in the problem), such a parameter is the input of the script. The procedure returns a file containing the instance of the problem, written according to the format described above.
 \begin{algorithm}
 \caption{Set Packing Problem generator}
 \begin{algorithmic}[1]
 
 \Procedure{GenerateSetPackingProblem}{$filename$, $N$}      
-
+    \Variables
     \State set S := $\varnothing$  \Comment{Set of subsets names}
     \State set W := $\varnothing$  \Comment{Set of subsets weights}
     \State set C := $\varnothing$  \Comment{Set of constraints}
+    \EndVariables
     \While{size(S) $\not=$ $N$ } 
         \State S $\leftarrow$ random$\_$string()   \Comment{Create random subset name}
         \State W $\leftarrow$ random$\_$number$\_$or$\_$null()  \Comment{Create random optional subset weight}
     \EndWhile  \label{loop}
-    \State int size$\_$of$\_$C $\leftarrow$ random$\_$positive$\_$up$\_$to$\_$($N$)  \Comment{generate random size of C}
+    \State int size$\_$of$\_$C $\leftarrow$ random$\_$positive$\_$up$\_$to$\_$($N$)  \Comment{Generate random size of C}
     \While{size(C) $\not=$ size$\_$of$\_$C}  
         \State C $\leftarrow$ random$\_$constraint$\_$from$\_$subsets(S) \Comment{Create random constraint from defined subsets}
     \EndWhile  \label{loop1}
@@ -202,22 +200,22 @@ Once the format has been defined, a script has been written in order to generate
 
 \end{algorithmic}
 \end{algorithm}
-Thanks to this generator, it has been possible to automatically generate several instances of the problem, of different sizes, in order to evaluate the space and time complexity of the algorithm for the resolution of the problem. 
+Thanks to this generator, it has been possible to automatically produce several instances of the problem, of different sizes, in order to evaluate the space and time complexity of the algorithm for the resolution of the problem. 
 \subsection{The first phase}
-In the first phase of the development of the algorithm, a study of the D-Wave Leap IDE platform has been performed, and the Python programming language has been used, since it is the language chosen by the D-Wave environment. 
+In the first phase of the development of the algorithm, we performed a study of the D-Wave Leap IDE platform and decided to adopt the Python programming language, since it is the language chosen by the D-Wave environment. 
 
-The Set Packing problem has been modeled as an object of the Set Packing class, which embodies all the data related to subsets and constraints, and paves the way for the usage of the \textit{BinaryQuadraticModel} \cite{WebSite10}, that is the main representation of a Binary Quadratic Model in the D-Wave System library. In particular, all the subsets are represented as \textit{variables} of the problem, and the constraints as \textit{interactions} among variables.
+The Set Packing problem has been modelled as an object of the \textit{SetPacking} class, which embodies all the data related to subsets and constraints, and paves the way for the usage of the \textit{BinaryQuadraticModel} \cite{WebSite10}, that is the main representation of a Binary Quadratic Model in the D-Wave System library. In particular, all the subsets are represented as \textit{variables} of the problem, and the constraints as \textit{interactions} among variables.
 
 After the program is correctly represented in memory, the sampling stage begins, by choosing one of the three topologies on which this study is based:
 \begin{enumerate}
-    \item \textit{2000Q}: It is invoked by the \textit{EmbeddingComposite} object, by specifying \textit{chimera} as topology type.
-    \item \textit{Advantage}: it is invoked by the \textit{EmbeddingComposite} object, as a default choice, thus no topology type needs to be specified.
-    \item \textit{Hybrid}: it is invoked by the \textit{LeapHybridSampler} object. It is an hybrid architecture.
+    \item \textbf{2000Q}: It is invoked by the \textit{EmbeddingComposite} object, by specifying \textit{chimera} as topology type.
+    \item \textbf{Advantage}: it is invoked by the \textit{EmbeddingComposite} object, as a default choice, thus no topology type needs to be specified.
+    \item \textbf{Hybrid}: it is invoked by the \textit{LeapHybridSampler} object. It is a hybrid architecture.
 \end{enumerate}
 
-Once the sampler has been chosen \cite{WebSite11}, the sampling stage can take place, and its results, received as a sampleset, can ben analyzed. The platform allows the use of a specific tools, called \textit{Inspector} \cite{WebSite12}, made available for the 2000Q and Advantage architectures, that let developers visualize the problems received from the machine and control several parameters, in addition to the quantum bits involved in the computation. Such parameters have been considered for the evaluation of the space and time complexity of the algorithm, and because of the absence of an inspector screen for the \textit{LeapHybridSampler}, for such a topology it is not possible to show any computational trend.
+Once the sampler has been chosen \cite{WebSite11}, the sampling stage can take place, and its results, received as a sample set, can be analyzed. The platform allows the use of a specific tool, called \textit{Inspector} \cite{WebSite12}, made available for the 2000Q and Advantage architectures, that let developers visualize the problems received from the machine and control several parameters, in addition to the quantum bits involved in the computation. We considered such parameters for the evaluation of the space and time complexity of the algorithm, and because of the absence of an inspector screen for the \textit{LeapHybridSampler}, for such a topology it was not possible to show any computational trend.
 
-As a matter of completeness, the pseudocode of the resolution of a set packing problem is here reported. The input of the \textit{SolveSetPackingProblem} is a file name, corresponding to a file that has been previously written in accordance to the aforementioned format.
+As a matter of completeness, the pseudocode of the resolution of a set packing problem is here reported. The input of the \textit{SolveSetPackingProblem} is a file name, corresponding to a file that has been previously written in accordance with the aforementioned format.
 
 \begin{algorithm}
 \caption{Set Packing Problem solver}
@@ -235,9 +233,9 @@ As a matter of completeness, the pseudocode of the resolution of a set packing p
  \State $bqm$, BinaryQuadraticModel
 \EndVariables
 %read file
-\State $P$ := read$\_$sanitized$\_$file($filename$)  \Comment{Read a file, and verify if the format is consistent and instantiate the corresponding SetPackingProblem}
+\State $P$ := read$\_$sanitized$\_$file($filename$)  \Comment{Read a file, verify the format and instantiate $P$}
 \ForEach {subset $\in$ $P$.subsets} 
-        \State $bqm$.add$\_$variable(subset.name, subset.weight)   \Comment{Add subset and its weight as a variable into the binary quadratic model}
+        \State $bqm$.add$\_$variable(subset.name, subset.weight)   \Comment{Add subset and weight as a variable in the binary quadratic model}
 \EndFor  \label{loop2}
 \ForEach {constraint $\in$ $P$.constraints} 
     \ForEach {i $\in$ constraint}
@@ -255,7 +253,7 @@ As a matter of completeness, the pseudocode of the resolution of a set packing p
 
 \textbf{2000Q: space and time complexity} \\
 
-For what concerns the 2000Q architecture, the maximum size of a set packing problem that has been successfully computed is circa 60. In order to consider the space complexity, the inspector has been checked for increasing sizes of the problem ($N$ = 10, 20, 30, 40, 50, 60). For these values, the maximum chain length has been reported.
+For what concerns the 2000Q architecture, the maximum size of a set packing problem that has been successfully computed is circa 60. In order to consider the space complexity, we checked the inspector for increasing sizes of the problem ($N$ = 10, 20, 30, 40, 50, 60). For these values, we here report the maximum chain length that has been obtained (figures 1 to 6).
 
 
 
@@ -263,19 +261,19 @@ For what concerns the 2000Q architecture, the maximum size of a set packing prob
 \begin{minipage}[b]{4.5cm}
 
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000Qfirst10.png}
-\caption{N=10\\max chain length = 4}
+\caption{N=10 subsets\\max chain length = 4}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000Qfirst20.png}
-\caption{N=20\\max chain length = 7}
+\caption{N=20 subsets\\max chain length = 7}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000Qfirst30.png}
-\caption{N=30\\max chain length = 12}
+\caption{N=30 subsets\\max chain length = 12}
 \end{minipage}
 \end{figure}
 
@@ -283,23 +281,23 @@ For what concerns the 2000Q architecture, the maximum size of a set packing prob
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000Qfirst40.png}
-\caption{N=40\\max chain length = 15}
+\caption{N=40 subsets\\max chain length = 15}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000Qfirst50.png}
-\caption{N=50\\max chain length = 21}
+\caption{N=50subsets\\max chain length = 21}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000Qfirst60.png}
-\caption{N=60\\max chain length=31}
+\caption{N=60subsets\\max chain length=31}
 \end{minipage}
 \end{figure}
 
-In order to evaluate the time complexity of the algorithm, it has been tested on increasing sizes of the problem, and the QPU time spent by the machine (i.e., the time spent by the QPU to solve the problem, \cite{WebSite13}) has been analyzed. The following plots show the trends of the time complexity:
+In order to evaluate the time complexity of the algorithm, we tested it on increasing sizes of the problem, and analyzed the QPU time spent by the machine (i.e., the time spent by the QPU, Quantum Processing Unit, to solve the problem \cite{WebSite13}). The following plots show the trends of the time complexity:
 \begin{figure}[htp]
 \centering
 \includegraphics[width=15cm]{LaTeXTemplate/Images/2000QfirstT1.png}
@@ -311,30 +309,30 @@ In order to evaluate the time complexity of the algorithm, it has been tested on
 \caption{Time complexity, without outliers (real values in green, general trend in red)}
 \end{figure}
 
-In figure 7, it can be notice that the overall trend is a linear increase, even though some spikes are present, due to the intrinsic noise belonging to the machines \cite{WebSite14}. By removing such outliers, the linearity is even more noticeable, as figure 8 shows.
+In figure 7, it can be noticed that the overall trend is a linear increase, even though some spikes are present, due to the intrinsic noise belonging to the machines \cite{WebSite14}. By removing such outliers, the linearity is even more noticeable, as figure 8 shows.
 \\
 \\
 \textbf{Advantage: space and time complexity} \\
 
-Analogous considerations have been made for the Advantage architecture. In this case, the maximum size for an instance to be successfully computed is about 150. The space complexity has been observed for $N$ = 10, 40, 70, 100, 130, 150.
+We made analogous considerations for the Advantage architecture. In this case, the maximum size for an instance to be successfully computed is about 150. The space complexity has been observed for $N$ = 10, 40, 70, 100, 130, 150.
 
 \begin{figure}[htp]
 \begin{minipage}[b]{4.5cm}
 
 \includegraphics[width=5cm]{LaTeXTemplate/Images/Advantagefirst10.png}
-\caption{N=10\\max chain length = 2}
+\caption{N=10 subsets\\max chain length = 2}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 
 \includegraphics[width=5cm]{LaTeXTemplate/Images/Advantagefirst40.png}
-\caption{N=40\\max chain length = 7}
+\caption{N=40 subsets\\max chain length = 7}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/Advantagefirst70.png}
-\caption{N=70\\max chain length = 13}
+\caption{N=70 subsets\\max chain length = 13}
 \end{minipage}
 \end{figure}
 
@@ -342,19 +340,19 @@ Analogous considerations have been made for the Advantage architecture. In this 
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/Advantagefirst100.png}
-\caption{N=100\\max chain length = 29}
+\caption{N=100 subsets\\max chain length = 29}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/Advantagefirst130.png}
-\caption{N=130\\max chain length = 29}
+\caption{N=130 subsets\\max chain length = 29}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/Advantagefirst150.png}
-\caption{N=150\\max chain length=32}
+\caption{N=150 subsets\\max chain length=32}
 \end{minipage}
 \end{figure}
 
@@ -377,50 +375,51 @@ there can be observed a general linear increase, even though, once again, the gr
 \newpage
 
 \subsection{The second phase}
-After the first phase, in which the algorithm and the problem generator have been tested, we focused on improving the simulations and the experiments modelling some useful parameters. In particular, we modelled the following parameters:\\
+After the first phase, in which the algorithm and the problem generator have been tested, we focused on improving the simulations and the experiments modelling some useful parameters. In particular, we modelled the following values:\\
 \begin{itemize}
-    \item \textbf{the num$\_$reads} parameter. It represents the number of samples asked to the solver. By default, it is set to 1 so the solver tries to find just one sample. To get a more reliable result, we set this param to 100.
-    \item \textbf{the chain$\_$strength} parameter. It represents the strength of the chain. For the sake of clarity, let us specify that a solution is said to be correct and trustable if it has the least chain breaks possible. Considering this, the chain$\_$strength parameter “forces” the solver to find a solution which is at least as strong as specified. It must be specified that choosing a too low or too high value of chain strength has negative effects. In particular, a too low value leads to a too high number of chain breaks while a too high value leads to a change the nature of the problem\cite{WebSite4}. So, to choose a proper way the value, we used the method uniform$\_$torque$\_$compensation \cite{WebSite5}, which computes the chain strength that attempts to compensate for the torque that would cause the chain breaks.
-    \item \textbf{pre$\_$factor} parameter. It is a parameter of uniform$\_$torque$\_$compensation and it allows the method to find the best value of chain$\_$strength. By default, its value is set to 1.414 but, normally, it belongs to a range [0.5,2.0]. By doing several experiments, the optimal value for which the minimum number of chain breaks resulted is 2.0.\\
+    \item the \textbf{num$\_$reads} parameter. It represents the number of samples asked to the solver. By default, it is set to 1 so the solver tries to find just one sample. To get a more reliable result, we set this param to 100.
+    \item the \textbf{chain$\_$strength} parameter. It represents the strength of the chain. For the sake of clarity, let us specify that a solution is said to be correct and trustable if it has the minimum possible number of chain breaks. Considering this, the chain$\_$strength parameter “forces” the solver to find a solution which is at least as strong as specified. We must specify that choosing an excessively low or high value of chain strength has negative effects. In particular, a too low value leads to a too high number of chain breaks while a too high value leads to a change in the nature of the problem\cite{WebSite4}. Therefore, to choose a proper value, we used the method uniform$\_$torque$\_$compensation \cite{WebSite5}, which computes the chain strength that attempts to compensate for the torque that would cause the chain breaks.
+    \item the \textbf{pre$\_$factor} parameter. It is a parameter of uniform$\_$torque$\_$compensation and it allows the method to find the best value of chain$\_$strength. By default, its value is set to 1.414 but, normally, it belongs to a range [0.5,2.0]. By doing several experiments, the optimal value for which the minimum number of chain breaks resulted is 2.0.\\
 \end{itemize}
-Following, the result of the experiment performed are presented in order analyze the spacial complexity of each instances. 
-The problem with a number of subsets belonging to [1,60] have been solved with 2000Q and Advantage while the problem with a number of subsets belonging to [61,150] have been solved with Advantage only since the problems were computationally too hard.\\
+Here follows the result of the experiment performed in order to analyze the space complexity of each instance.
+
+The problems with a number of subsets belonging to [1,60] have been solved with 2000Q and Advantage while the problems with a number of subsets belonging to [61,150] have been solved with Advantage only, since they required an excessive amount of resources to be successfully computed, more than what 2000Q can provide.\\
 \\
 \textbf{2000Q : number of chain breaks = 0}
 \begin{figure}[htp]
 \begin{minipage}[b]{4.5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QN10.png}
-\caption{N=10\\max chain length = 4\\max chain strength=120.72\\physical qubits = 33}
+\caption{N=10 subsets\\max chain length = 4\\max chain strength=120.72\\physical qubits = 33}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QN20.png}
-\caption{N=20\\max chain length = 8\\max chain strength=95.47\\physical qubits = 132}
+\caption{N=20 subsets\\max chain length = 8\\max chain strength=95.47\\physical qubits = 132}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QN30.png}
-\caption{N=30\\max chain length = 9\\max chain strength=52.21\\physical qubits = 178}
+\caption{N=30 subsets\\max chain length = 9\\max chain strength=52.21\\physical qubits = 178}
 \end{minipage}
 \end{figure}
 \begin{figure}[htp]
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QN40.png}
-\caption{N=40\\max chain length = 17\\max chain strength=273.18\\physical qubits = 528}
+\caption{N=40 subsets\\max chain length = 17\\max chain strength=273.18\\physical qubits = 528}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QN50.png}
-\caption{N=50\\max chain length = 25\\max chain strength=701.68\\physical qubits = 888}
+\caption{N=50 subsets\\max chain length = 25\\max chain strength=701.68\\physical qubits = 888}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QN60.png}
-\caption{N=60\\max chain length=33\\max chain strength=1285.3\\physical qubits=1295}
+\caption{N=60 subsets\\max chain length=33\\max chain strength=1285.3\\physical qubits=1295}
 \end{minipage}
 \end{figure}
 \newpage
@@ -428,53 +427,53 @@ The problem with a number of subsets belonging to [1,60] have been solved with 2
 \begin{figure}[htp]
 \begin{minipage}[b]{4.5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantageN10.png}
-\caption{N=10\\max chain length = 2\\max chain strength=100.40\\physical qubits = 16}
+\caption{N=10 subsets\\max chain length = 2\\max chain strength=100.40\\physical qubits = 16}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantageN40.png}
-\caption{N=40\\max chain length = 7\\max chain strength=114.09\\physical qubits = 206}
+\caption{N=40 subsets\\max chain length = 7\\max chain strength=114.09\\physical qubits = 206}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantageN70.png}
-\caption{N=70\\max chain length = 11\\max chain strength=1839.2\\physical qubits = 553}
+\caption{N=70 subsets\\max chain length = 11\\max chain strength=1839.2\\physical qubits = 553}
 \end{minipage}
 \end{figure}
 \begin{figure}[htp]
 \begin{minipage}[b]{4.5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantageN100.png}
-\caption{N=100\\max chain length = 19\\max chain strength=2722.5\\physical qubits = 1324}
+\caption{N=100 subsets\\max chain length = 19\\max chain strength=2722.5\\physical qubits = 1324}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantageN130.png}
-\caption{N=130\\max chain length = 28\\max chain strength=3011.2\\physical qubits = 2356}
+\caption{N=130 subsets\\max chain length = 28\\max chain strength=3011.2\\physical qubits = 2356}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{4.5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantageN150.png}
-\caption{N=150\\max chain length=34\\max chain strength=2350.4\\physical qubits=3309}
+\caption{N=150 subsets\\max chain length=34\\max chain strength=2350.4\\physical qubits=3309}
 \end{minipage}
 \end{figure}
 
 \newpage
-In order to evaluate the time complexity,with the same aforementioned settings, we chose to repeat the experiment ten times. Then we made the average of the results achieved in order to collect a more reliable result. Thanks to leap we could print on a file several data about timing and energy and using python script we obtained the following results:\\
+In order to evaluate the time complexity, with the same aforementioned settings, we chose to repeat the experiments ten times. Then we made the average of the results achieved in order to collect a more reliable result. Thanks to Leap we could print on a file several data about timing and energy and using python scripts we obtained the following results:\\
 \\
 \textbf{2000Q}
 \begin{figure}[htp]
 \begin{minipage}[b]{7.5cm}
 \centering
-\includegraphics[width=9cm]{LaTeXTemplate/Images/2000QTimeComplexity.png}
+\includegraphics[width=8cm]{LaTeXTemplate/Images/2000QTimeComplexity.png}
 \caption{2000Q Time complexity: mean}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{9cm}
 \centering
-\includegraphics[width=9cm]{LaTeXTemplate/Images/2000QTimeVariance.png}
+\includegraphics[width=8cm]{LaTeXTemplate/Images/2000QTimeVariance.png}
 \caption{2000Q Time complexity: variance}
 \end{minipage}
 \end{figure}\\
@@ -484,17 +483,17 @@ As it can be noticed in figures 29 and 30, the mean and variance of the QPU time
 \begin{figure}[htp]
 \begin{minipage}[b]{7.5cm}
 \centering
-\includegraphics[width=9cm]{LaTeXTemplate/Images/2000QMaxMinEnValue.png}
+\includegraphics[width=8cm]{LaTeXTemplate/Images/2000QMaxMinEnValue.png}
 \caption{2000Q Max and min energy:values}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{9cm}
 \centering
-\includegraphics[width=9cm]{LaTeXTemplate/Images/2000QMaxMinEnMean.png}
+\includegraphics[width=8cm]{LaTeXTemplate/Images/2000QMaxMinEnMean.png}
 \caption{Max and min energy: mead}
 \end{minipage}
 \end{figure}
-For what concerns the maximum and minimum value of energy, for each value of $N$, it can be seen that the mean value for the minimum energy remains approximately constant, while the maximum value increases as a function of $N$. \\
+For what concerns the maximum and minimum value of the energy, for each value of $N$, it can be seen that the mean value for the minimum energy remains approximately constant, while the maximum value increases as a function of $N$. \\
 \\
 \textbf{Advantage}
 
@@ -512,7 +511,7 @@ For what concerns the maximum and minimum value of energy, for each value of $N$
 \end{minipage}
 \end{figure}
 
-As it can be noticed in figures 33 and 34, the mean of the ten execution has been calculated for each $N$. The resulting mean increases as a function of the number of subsets while the variance increases as well, even though more irregularly. In the following pictures, instead, the max and min energy is shown.
+As it can be noticed in figures 33 and 34, we calculated the mean of the ten executions for each $N$. The resulting mean increases as a function of the number of subsets, and the variance increases as well, even though more irregularly. In the following pictures, instead, the max and min energy is shown.
 \newpage
 \begin{figure}[htp]
 \begin{minipage}[b]{9cm}
@@ -532,72 +531,72 @@ For what concerns the maximum and minimum values of the energy, as it can be not
 
 \section{Comparison}
 
-Time complexity and space complexity are the main focus or our analysis of the previously described experiments. 
+Time complexity and space complexity are the main focus of our analysis of the previously described experiments. 
 
 
-For what concerns time, 2000Q system outscores Advantage. Figures 33 and 29 show the execution time of, respectively, Advantage and 2000Q. The former has, on average, higher QPU (Quantum Processing Unit) execution time than the latter, as its values vary between 15065 and 15085 milliseconds, while for the 2000Q values range from 10700 to 11100 milliseconds. Nonetheless, we stress the fact that, although 2000Q might seem faster for each experiment, execution time rapidly increases and the values cover a wider range, and Advantage is capable of handling more complex instances of the problem, although it is a little bit slower. We also point out that Advantage is noisier environment, and so these times also enclose some delays intrinsic to the system. In addition, in our analysis we do not consider outliers, which indeed are quite common, especially in the Advantage system: during our measurements we faced some spikes in the graphs, such the one in figure x, which we removed to retrieve statistics from data.
+For what concerns time, the 2000Q system outscores Advantage. Figures 33 and 29 show the execution time of, respectively, Advantage and 2000Q. The former has, on average,a higher QPU (Quantum Processing Unit) execution time than the latter, as its values vary between 15065 and 15085 milliseconds, while for the 2000Q values range from 10700 to 11100 milliseconds. Nonetheless, we stress the fact that, although 2000Q might seem faster for each experiment, execution time rapidly increases and the values cover a wider range, while Advantage is capable of handling more complex instances of the problem, although it is a little bit slower. We also point out that Advantage is a noisier environment, thus these times also include some delays that are intrinsic to the system. In addition, in our analysis, we do not consider outliers, which indeed are quite common, especially in the Advantage system: during our measurements we faced some spikes in the graphs, such as the one in figure x, which we removed to better visualize the statistical trend.
 
-In general, QPU time to solve problems’ instances increases as the square root of the number N of subsets for 2000Q, while it linearly increases for Advantage. To reach these considerations, in our experiments we fitted different models as figures a b c show, and the best one we found are
-${O(N^{1/2})}$ and ${O(N)}$ for, respectively, 2000Q and Advantage, where N is the number of subsets of an instance of a problem.
+In general, QPU time to solve problems’ instances increases as the square root of the number N of subsets for 2000Q, while it increases linearly for Advantage. To reach these considerations, in our experiments we fitted different models as figures 37 to 42 show, and the best ones we found are
+$\mathcal{O}(\sqrt{n})$ and $\mathcal{O}(n)$ for, respectively, 2000Q and Advantage, where N is the number of subsets in the instance of the problem.
 
-With regard to space complexity, the greater amount of qubits in the Advantage system allows for more complex problems to be solved: Advantage is more powerful than 2000Q, and this is because it has more q-bits; however, the cost of a more power system is to be found in noise. Noise affects the solution found by the system, and to get more precise and stronger solutions, we tuned the chain strength parameter: by tuning the chain strength, it has been possible to nullify the number of chain breaks in the considered problems, while the maximum chain lengths result to be similar for both platforms. The maximum number of subsets in the problem solved by the systems is 150 (on average, it depends on the particular instance and the number of constraints of the problem) for Advantage and 60 for 2000Q.
+About space complexity, the greater amount of qubits in the Advantage system allows for more complex problems to be solved: Advantage is more powerful than 2000Q, and this is because it has more qubits; however, the cost of a more powerful system is to be found in the noise. Noise affects the solution found by the machine, and to get more precise and stronger solutions, we tuned the chain strength parameter: by optimizing the value of such a parameter, it has been possible to nullify the number of chain breaks in the considered problems, while the maximum chain lengths result to be similar for both platforms. The maximum number of subsets for problems solved by the systems is 150 for Advantage and 60 for 2000Q (on average, it depends on the particular instance and the number of constraints of the problem).
 
-Our last considerations are addressed to energy levels of the solution found by the quantum annealers: Advantage has higher orders of magnitude than 2000Q. This is due to the fact that Advantage system is an environment with higher noise, and, for this reason, it needs higher energy to provide a reliable result. The instability of Advantage is confirmed by the fact that, considering time complexity but also the energy of the provided solutions, data have more variance than 2000Q for each instance's size.
+Our last considerations are addressed to energy levels of the solution found by the quantum annealers: Advantage has higher orders of magnitude than 2000Q. This is due to the fact that the Advantage system is an environment with higher noise, and, for this reason, it needs higher energy to provide a reliable result. The instability of Advantage is confirmed by the fact that, considering the time complexity but also the energy of the provided solutions, data have more variance than 2000Q for each size of the instances.
 
 
 \textbf{2000Q}
 
 \begin{figure}[htp]
-\begin{minipage}[b]{4.5cm}
+\begin{minipage}[b]{5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QpossibleFitting1.png}
-\caption{\\QPU time=$O(\log(n))$\\
+\caption{\\QPU time=$\mathcal{O}(\log(N))$\\
 R2 = 0.8830\\
 }
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QpossibleFitting2.png}
-\caption{\\QPU time=$O((n))$\\
+\caption{\\QPU time=$\mathcal{O}(N)$\\
 R2 = 0.9448\\}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
-\begin{minipage}[b]{4.5cm}
+\begin{minipage}[b]{5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/2000QpossibleFitting3.png}
-\caption{\\QPU time=$\mathcal{O}(\sqrt{n})$\\
+\caption{\\QPU time=$\mathcal{O}(\sqrt{N})$\\
 {\color{ForestGreen}R2 = 0.9727\\}}
 \end{minipage}
 \end{figure}
 
-\textbf{The Advantage}
+\textbf{Advantage}
 
 \begin{figure}[htp]
-\begin{minipage}[b]{4.5cm}
+\begin{minipage}[b]{5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantagePossibleFitting1.png}
-\caption{\\QPU time=$O(\log(n))$\\
+\caption{\\QPU time=$\mathcal{O}(\log(N))$\\
 R2 = 0.6113 \\
 }
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
 \begin{minipage}[b]{5cm}
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantagePossibleFitting2.png}
-\caption{\\QPU time=$O((n))$\\
+\caption{\\QPU time=$\mathcal{O}((N))$\\
 {\color{ForestGreen} R2 = 0.8575\\}}
 \end{minipage}
 \ \hspace{2mm} \hspace{2mm} \
-\begin{minipage}[b]{4.5cm}
+\begin{minipage}[b]{5cm}
 \centering
 \includegraphics[width=5cm]{LaTeXTemplate/Images/AdvantagePossibleFitting3.png}
-\caption{\\QPU time=$\mathcal{O}(\sqrt{n})$\\
+\caption{\\QPU time=$\mathcal{O}(\sqrt{N})$\\
 R2 = 0.7914 \\}
 \end{minipage}
 \end{figure}
 \section{Conclusions}
-This research has been focus on solving Set Packing Problems by using quantum annealers, provided by D-Wave. The framework and the involved architectures have been thoroughly analyzed, in order to get the highest possible efficiency, lowering the execution time and taking advantage of the available resources at the most. 
+This research has been focused on solving Set Packing Problems by using quantum annealers, provided by D-Wave. The framework and the involved architectures have been thoroughly analyzed, in order to get the highest possible efficiency, by lowering the execution time and taking advantage of the available resources at the most. 
 \\
-By using a specific format, based on JSON, and a suitable problem generator, an optimized algorithm has been designed, that takes advantages of the tools provided by the D-Wave System library and that exploits both the two main architecture topologies: 2000Q and Advantage.
+By using a specific format, based on JSON, and a suitable problem generator, an optimized algorithm has been designed, that takes advantage of the tools provided by the D-Wave System library and that exploits both the two main architecture topologies: 2000Q and Advantage.
 \\
-After analyzing the time and space complexity of the algorithm, in the two phases of the development, a comparison between the architectures has been performed, and it resulted that, for what concerns space complexity, Advantage has several pros with respect to the 2000Q, due to the greater amount of qubits belonging to the platform, whilst for the time complexity it resulted that, being equal the size $N$ of the instance, 2000Q executes the algorithm in a faster way. It is important to highlight that Advantage can actually solve problems of higher size than 2000Q.
+After analyzing the time and space complexity of the algorithm, in the two phases of the development, a comparison between the architectures has been performed, and it resulted that, for what concerns space complexity, Advantage has several pros with respect to the 2000Q, due to the greater amount of qubits belonging to the platform, whilst for the time complexity it resulted that, being equal the size $N$ of the instance, 2000Q executes the algorithm in a faster way. It is important to highlight that Advantage can solve problems of higher size than 2000Q.
 \\
 As a further observation, the empirical analysis of the experiments has underlined the difference between the time complexity of the 2000Q and Advantage, with the former having an $\mathcal{O}(\sqrt{n})$ complexity, with respect to the $\mathcal{O}(n)$ complexity of the latter. Yet, an even more important result of this study is that the usage of quantum annealers has allowed the solution of a classical NP-complete problem in reasonable times, thus proving, once again, the efficiency of this new frontier of research.
 
