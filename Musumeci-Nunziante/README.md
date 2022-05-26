@@ -6,6 +6,7 @@ Nowadays the state of the art of quantum computing is characterized by the so-ca
 
 * [Group components](#group)
 * [Plan](#plan)
+* [Latex](#latex)
 
 <a name="group"></a>
 ## Group Components
@@ -22,13 +23,17 @@ Nowadays the state of the art of quantum computing is characterized by the so-ca
 | Basic overview of quantum computing world | ✅|
 | Implementation of basic algorithms | ✅|
 | Attending "Introduction to Quantum Computing" course |  ✅ |
-| Collect detailed information related to our scope |📖 |
+| Collect detailed information related to our scope |✅ |
 | Design the idea |✅ |
-| Implement the algorithm | |
+| Implement the algorithm |📖|
 | Collect the results | |
 | Write the paper |📖|
 
  📖 = In progress <br />
  ✅ = Done <br />
  ❓= Questions about
+ 
+ <a name="latex"></a>
+ ## Latex
+ [Link to the Report](https://www.overleaf.com/read/mgdzbtyzrhps)
  
