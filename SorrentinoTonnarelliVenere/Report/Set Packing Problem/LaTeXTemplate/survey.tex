@@ -384,11 +384,11 @@ In order to evaluate time complexity, the same plots as for the 2000Q architectu
 \centering
 \begin{minipage}[b]{12.5cm}
 \includegraphics[width=12.5cm]{LaTeXTemplate/Images/AdvantagefirstT2.png}
-\caption{Advantage max and min energy:values}
+\caption{Advantage time complexity}
 \end{minipage}
 \begin{minipage}[b]{12cm}
 \includegraphics[width=12cm]{LaTeXTemplate/Images/AdvantagefirstT1.png}
-\caption{Max and min energy: mean}
+\caption{Advantage time complexity without outliers}
 \end{minipage}
 \end{figure}
 As figure 15 shows, the presence of some particular spikes prevents a correct analysis of the general trend, due to the noise of the Advantage. By removing such outliers, as in figure 16, 
@@ -557,7 +557,7 @@ For what concerns the maximum and minimum values of the energy, as it can be not
 Time complexity and space complexity are the main focus of our analysis of the previously described experiments. 
 
 
-For what concerns time, the 2000Q system outscores Advantage. Figures 33 and 29 show the execution time of, respectively, Advantage and 2000Q. The former has, on average,a higher QPU (Quantum Processing Unit) execution time than the latter, as its values vary between 15065 and 15085 milliseconds, while for the 2000Q values range from 10700 to 11100 milliseconds. Nonetheless, we stress the fact that, although 2000Q might seem faster for each experiment, execution time rapidly increases and the values cover a wider range, while Advantage is capable of handling more complex instances of the problem, although it is a little bit slower. We also point out that Advantage is a noisier environment, thus these times also include some delays that are intrinsic to the system. In addition, in our analysis, we do not consider outliers, which indeed are quite common, especially in the Advantage system: during our measurements we faced some spikes in the graphs, such as the one in figure x, which we removed to better visualize the statistical trend.
+For what concerns time, the 2000Q system outscores Advantage. Figures 33 and 29 show the execution time of, respectively, Advantage and 2000Q. The former has, on average,a higher QPU (Quantum Processing Unit) execution time than the latter, as its values vary between 15065 and 15085 milliseconds, while for the 2000Q values range from 10700 to 11100 milliseconds. Nonetheless, we stress the fact that, although 2000Q might seem faster for each experiment, execution time rapidly increases and the values cover a wider range, while Advantage is capable of handling more complex instances of the problem, although it is a little bit slower. We also point out that Advantage is a noisier environment, thus these times also include some delays that are intrinsic to the system. In addition, in our analysis, we do not consider outliers, which indeed are quite common, especially in the Advantage system: during our measurements we faced some spikes in the graphs, such as the one in figure 15, which we removed to better visualize the statistical trend.
 
 In general, QPU time to solve problems’ instances increases as the square root of the number N of subsets for 2000Q, while it increases linearly for Advantage. To reach these considerations, in our experiments we fitted different models as figures 37 to 42 show, and the best ones we found are
 $\mathcal{O}(\sqrt{n})$ and $\mathcal{O}(n)$ for, respectively, 2000Q and Advantage, where N is the number of subsets in the instance of the problem.
