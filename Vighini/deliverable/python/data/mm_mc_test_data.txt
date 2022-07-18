@@ -1,0 +1,30 @@
+0  skillful person teaches tunes
+1  man teaches simple monoids
+1  man teaches simple maths
+1  person explains simple monoids
+0  man teaches intresting music 
+0  man listens music 
+1  person teaches categories
+1  man explains maths
+0  woman teaches chords
+1  woman teaches monoids
+1  person describes simple maths
+1  man describes maths
+0  man teaches music 
+0  skillful person teaches chords
+1  woman explains monoids 
+1  skillful man explains maths
+0  man teaches intresting chords
+0  woman plays music 
+0  skillful woman listens tunes
+0  man plays chords
+0  skillful woman plays tunes
+0  person plays chords
+1  person explains monoids
+1  skillful woman explains categories
+1  skillful woman describes categories
+0  woman listens intresting chords
+1  man describes monoids
+0  person plays music
+1  woman explains maths
+0  skillful woman plays chords

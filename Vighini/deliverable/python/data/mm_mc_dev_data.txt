@@ -1,0 +1,20 @@
+0  man listens tunes
+1  person teaches simple categories
+0  woman plays intresting chords 
+0  man listens intresting tunes
+1  woman explains simple categories 
+0  person teaches music 
+0  woman plays intresting tunes 
+0  skillful woman teaches tunes 
+0  man plays tunes 
+0  woman teaches intresting tunes 
+0  man plays intresting music 
+1  woman describes maths
+1  woman teaches simple categories
+1  woman describes simple maths
+0  skillful woman teaches chords
+1  skillful man teaches categories
+1  skillful woman describes maths
+0  woman listens intresting music 
+0  skillful person listens chords
+0  skillful person teaches music 
